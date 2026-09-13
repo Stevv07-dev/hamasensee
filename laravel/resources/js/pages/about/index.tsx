@@ -1,0 +1,801 @@
+'use client';
+
+import HomeLayout from '@/layouts/home-layout';
+import type { AboutPageProps } from '@/types/home';
+import { Hero } from '@/components/home/hero';
+import { motion, type Variants } from 'framer-motion';
+import { Users, Target, BookOpen, Sparkles, Droplets, Leaf, Zap, CheckCircle2, ArrowRight } from 'lucide-react';
+
+// ---------------------
+// Animation Variants
+// ---------------------
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.1,
+        },
+    },
+}
+
+const fadeUpVariants: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94] as const,
+        },
+    },
+}
+
+const fadeInVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            duration: 0.5,
+            ease: 'easeOut' as const,
+        },
+    },
+}
+
+const scaleUpVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94] as const,
+        },
+    },
+}
+
+const slideLeftVariants: Variants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94] as const,
+        },
+    },
+}
+
+const slideRightVariants: Variants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94] as const,
+        },
+    },
+}
+
+const statVariants: Variants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+            duration: 0.5,
+            ease: [0.25, 0.46, 0.45, 0.94] as const,
+        },
+    },
+}
+
+const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 40, scale: 0.95 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+            duration: 0.5,
+            ease: [0.25, 0.46, 0.45, 0.94] as const,
+        },
+    },
+}
+
+const timelineVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.2,
+            delayChildren: 0.2,
+        },
+    },
+}
+
+const timelineItemVariants: Variants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.5,
+            ease: 'easeOut' as const,
+        },
+    },
+}
+
+type TeamMember = {
+    name: string;
+    role: string;
+    nim?: any;
+    image: string;
+};
+
+export default function About(props: AboutPageProps) {
+    const teamMembers: TeamMember[] = [
+        {
+            name: 'Muchamad Fajri Amirul Nasrullah, S.ST., M.Sc',
+            role: 'Project Manager',
+            nim: null,
+            image: 'https://if.polibatam.ac.id/assets/backupold/img/dosen/fajri.JPG',
+        },
+        {
+            name: 'Muhammad Danial',
+            role: 'AI Engineer',
+            nim: 'NIM: 3312401042',
+            image: '/images/team_danial.png',
+        },
+        {
+            name: 'Bastian Henriko Limbong',
+            role: 'Backend Developer',
+            nim: 'NIM: 3312401092',
+            image: '/images/team_bastian.png',
+        },
+        {
+            name: 'Wahyudi',
+            role: 'UI/UX Designer',
+            nim: 'NIM: 3312401014',
+            image: '/images/team_wahyudi.png',
+        },
+        {
+            name: 'Steven Marcell Samosir',
+            role: 'Frontend Developer',
+            nim: 'NIM: 3312401003',
+            image: '/images/team_steven.png',
+        },
+    ];
+
+    const milestones = [
+        { year: '2025 Q1', event: 'Inisiasi Kebutuhan pengguna untuk Urban Farming', icon: Leaf, status: 'completed' },
+        { year: '2025 Q2', event: 'Pengembangan Model AI Deteksi Hama Tanaman Urban', icon: Zap, status: 'completed' },
+        { year: '2025 Q3', event: 'Testing & Validasi Sistem pada Kebun Kota & Hidroponik', icon: CheckCircle2, status: 'current' },
+        { year: '2025 Q4', event: 'Launch beta untuk masyarakat kota demi wujudkan kemandirian pangan', icon: ArrowRight, status: 'upcoming' },
+    ];
+
+    const values = [
+        {
+            icon: Target,
+            title: 'Inovasi Hijau',
+            description: 'Menggabungkan Aplikasi dan AI model yang terlatih serta teknik urban farming hemat ruang',
+            color: 'from-emerald-500 to-green-600',
+        },
+        {
+            icon: Droplets,
+            title: 'Efisiensi Air',
+            description: 'Rekomendasi nutrisi dan penyiraman presisi untuk kebun kota',
+            color: 'from-cyan-500 to-blue-600',
+        },
+        {
+            icon: BookOpen,
+            title: 'Edukasi Praktis',
+            description: 'Panduan singkat untuk balkon, pot, hingga instalasi hidroponik',
+            color: 'from-amber-500 to-orange-600',
+        },
+        {
+            icon: Users,
+            title: 'Komunitas',
+            description: 'Berjejaring dengan pegiat kebun kota, kampus, dan UMKM pangan segar',
+            color: 'from-violet-500 to-purple-600',
+        },
+    ];
+
+    const stats = [
+        { value: '95%+', label: 'Akurasi Deteksi', sublabel: 'Model AI Terlatih' },
+        { value: '500+', label: 'Dataset Gambar', sublabel: 'Hama & Penyakit' },
+        { value: '<3s', label: 'Waktu Deteksi', sublabel: 'Real-time Analysis' },
+        { value: '10+', label: 'Jenis Tanaman', sublabel: 'Didukung Sistem' },
+    ];
+
+    const lead = teamMembers[0];
+    const others = teamMembers.slice(1);
+
+    return (
+        <HomeLayout
+            title="Tentang Kami"
+            navItems={props.navItems}
+            hero={{
+                size: 'half',
+                bg: {
+                    imageUrl: '/images/bg-hero.png',
+                    overlay: 'bg-gradient-to-b from-black/60 via-black/40 to-black/80',
+                },
+                content: (
+                    <Hero className="md:mt-10" title="Tentang Kami" showPills={false} />
+                ),
+            }}
+        >
+            {/* Stats Banner */}
+            <section className="relative -mt-16 z-10 px-4 md:px-6">
+                <div className="mx-auto max-w-6xl">
+                    <motion.div
+                        className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        {stats.map((stat, index) => (
+                            <motion.div
+                                key={index}
+                                className="group relative overflow-hidden rounded-2xl bg-white p-4 shadow-lg shadow-primary/5 ring-1 ring-gray-100 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 md:p-6"
+                                variants={statVariants}
+                                whileHover={{ y: -5, scale: 1.02 }}
+                            >
+                                <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-gradient-to-br from-primary/10 to-emerald-500/10 blur-2xl transition-all duration-500 group-hover:scale-150" />
+                                <p className="relative text-2xl font-bold bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent md:text-3xl">
+                                    {stat.value}
+                                </p>
+                                <p className="relative mt-1 text-sm font-semibold text-gray-800">
+                                    {stat.label}
+                                </p>
+                                <p className="relative text-xs text-gray-500">
+                                    {stat.sublabel}
+                                </p>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* About Project Section */}
+            <section className="relative overflow-hidden py-16 md:py-24">
+                <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+                    <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+                        {/* Left Content */}
+                        <motion.div
+                            className="order-2 lg:order-1"
+                            variants={slideLeftVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.3 }}
+                        >
+                            <motion.div
+                                className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6"
+                                variants={fadeInVariants}
+                            >
+                                <Leaf className="h-4 w-4" />
+                                Solusi Smart Farming
+                            </motion.div>
+
+                            <h2 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
+                                Tentang{' '}
+                                <span className="relative">
+                                    <span className="font-logo bg-gradient-to-r from-primary via-emerald-600 to-primary bg-clip-text text-transparent">
+                                        HAMASENSE
+                                    </span>
+                                    <span className="absolute -bottom-1 left-0 h-1 w-full bg-gradient-to-r from-primary to-emerald-500 rounded-full" />
+                                </span>
+                            </h2>
+
+                            <p className="mt-6 text-base leading-relaxed text-gray-600 md:text-lg">
+                                Hamasense adalah platform berbasis kecerdasan buatan untuk mendukung
+                                urban farming. Kami memanfaatkan{' '}
+                                <span className="font-semibold text-gray-800">Object Detection</span>{' '}
+                                dan{' '}
+                                <span className="font-semibold text-gray-800">Machine Learning</span>{' '}
+                                guna mendeteksi kemungkinan penyakit dan hama serta memandu perawatan kebun.
+                            </p>
+
+                            <p className="mt-4 text-sm leading-relaxed text-gray-500 md:text-base">
+                                Dengan smartphone, pengguna dapat memindai daun yang bermasalah,
+                                mendapat identifikasi hama, langkah organik yang bisa segera
+                                dilakukan, serta rekomendasi nutrisi agar tanaman tetap tumbuh.
+                            </p>
+
+                            {/* Feature Cards */}
+                            <motion.div
+                                className="mt-8 grid gap-4 sm:grid-cols-2"
+                                variants={containerVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, amount: 0.3 }}
+                            >
+                                <motion.div
+                                    className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 p-5 shadow-sm ring-1 ring-gray-100 transition-all duration-300 hover:shadow-lg hover:ring-primary/20"
+                                    variants={cardVariants}
+                                    whileHover={{ y: -5 }}
+                                >
+                                    <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full bg-primary/10 blur-xl transition-all duration-300 group-hover:scale-150" />
+                                    <div className="relative">
+                                        <div className="mb-3 inline-flex rounded-xl bg-primary/10 p-2.5">
+                                            <Zap className="h-5 w-5 text-primary" />
+                                        </div>
+                                        <p className="font-semibold text-gray-900">
+                                            User Experience First
+                                        </p>
+                                        <p className="mt-1.5 text-sm text-gray-600">
+                                            Antarmuka sederhana untuk pemula, mendukung mode cepat saat merawat kebun.
+                                        </p>
+                                    </div>
+                                </motion.div>
+
+                                <motion.div
+                                    className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 p-5 shadow-sm ring-1 ring-gray-100 transition-all duration-300 hover:shadow-lg hover:ring-primary/20"
+                                    variants={cardVariants}
+                                    whileHover={{ y: -5 }}
+                                >
+                                    <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full bg-emerald-500/10 blur-xl transition-all duration-300 group-hover:scale-150" />
+                                    <div className="relative">
+                                        <div className="mb-3 inline-flex rounded-xl bg-emerald-500/10 p-2.5">
+                                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                                        </div>
+                                        <p className="font-semibold text-gray-900">
+                                            Berbasis Riset & Data
+                                        </p>
+                                        <p className="mt-1.5 text-sm text-gray-600">
+                                            Dataset mencakup hama daun tomat, cabai pot, dan selada hidroponik.
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        </motion.div>
+
+                        {/* Right Visual */}
+                        <motion.div
+                            className="order-1 flex items-center justify-center lg:order-2"
+                            variants={slideRightVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.3 }}
+                        >
+                            <div className="relative w-full max-w-md">
+                                {/* Glow effect */}
+                                <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-primary via-emerald-500 to-cyan-500 opacity-30 blur-2xl" />
+
+                                {/* Main card */}
+                                <motion.div
+                                    className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary via-primary/95 to-emerald-600 p-8 text-white shadow-2xl md:p-10"
+                                    whileHover={{ scale: 1.02, rotateY: 5 }}
+                                    transition={{ duration: 0.4 }}
+                                >
+                                    {/* Decorative circles */}
+                                    <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+                                    <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+
+                                    <div className="relative flex flex-col items-center text-center">
+                                        <motion.div
+                                            className="mb-6 rounded-2xl bg-white/15 p-4 backdrop-blur-sm"
+                                            animate={{ rotate: [0, 5, -5, 0] }}
+                                            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                                        >
+                                            <Sparkles className="h-12 w-12 md:h-16 md:w-16" />
+                                        </motion.div>
+
+                                        <p className="text-sm font-medium uppercase tracking-widest text-white/70">
+                                            Akurasi Model
+                                        </p>
+                                        <p className="mt-2 text-5xl font-bold md:text-6xl">
+                                            95%<span className="text-3xl">+</span>
+                                        </p>
+                                        <p className="mt-3 text-sm text-white/70 max-w-xs">
+                                            Berdasarkan pengujian terhadap dataset uji internal dengan ribuan sampel.
+                                        </p>
+
+                                        {/* Mini stats */}
+                                        <div className="mt-8 grid w-full grid-cols-2 gap-3">
+                                            <motion.div
+                                                className="rounded-xl bg-white/10 p-4 backdrop-blur-sm transition-all hover:bg-white/15"
+                                                whileHover={{ scale: 1.05 }}
+                                            >
+                                                <p className="text-2xl font-bold">{'<'} 3s</p>
+                                                <p className="mt-1 text-xs text-white/70">Real-time Detection</p>
+                                            </motion.div>
+                                            <motion.div
+                                                className="rounded-xl bg-white/10 p-4 backdrop-blur-sm transition-all hover:bg-white/15"
+                                                whileHover={{ scale: 1.05 }}
+                                            >
+                                                <p className="text-2xl font-bold">10+</p>
+                                                <p className="mt-1 text-xs text-white/70">Jenis Hama</p>
+                                            </motion.div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Misi & Nilai Section */}
+            <section className="relative bg-gradient-to-b from-gray-50/50 to-white py-16 md:py-24">
+                <div className="mx-auto max-w-7xl px-4 md:px-6">
+                    {/* Section Header */}
+                    <motion.div
+                        className="mx-auto max-w-3xl text-center mb-12 md:mb-16"
+                        variants={fadeUpVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.5 }}
+                    >
+                        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-sm font-medium text-emerald-600 mb-4">
+                            <Target className="h-4 w-4" />
+                            Misi & Nilai
+                        </div>
+                        <h2 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
+                            Kebun Kota{' '}
+                            <span className="bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent">
+                                Cerdas
+                            </span>
+                        </h2>
+                        <p className="mt-4 text-base text-gray-600 md:text-lg max-w-2xl mx-auto">
+                            Hamasense membantu warga kota membangun kebun produktif di ruang
+                            sempit dengan teknologi deteksi hama berbasis AI.
+                        </p>
+                    </motion.div>
+
+                    {/* Values Grid */}
+                    <motion.div
+                        className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.2 }}
+                    >
+                        {values.map((value, index) => {
+                            const Icon = value.icon;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition-all duration-500 hover:shadow-xl hover:ring-primary/20"
+                                    variants={cardVariants}
+                                    whileHover={{ y: -8, scale: 1.02 }}
+                                >
+                                    {/* Hover gradient overlay */}
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${value.color} opacity-0 transition-opacity duration-500 group-hover:opacity-5`} />
+
+                                    {/* Icon with gradient bg */}
+                                    <motion.div
+                                        className={`mb-5 inline-flex rounded-xl bg-gradient-to-br ${value.color} p-3.5 text-white shadow-lg shadow-primary/20`}
+                                        whileHover={{ rotate: 10, scale: 1.1 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <Icon className="h-6 w-6" />
+                                    </motion.div>
+
+                                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors">
+                                        {value.title}
+                                    </h3>
+                                    <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                                        {value.description}
+                                    </p>
+
+                                    {/* Bottom accent line */}
+                                    <div className={`absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r ${value.color} transition-all duration-500 group-hover:w-full`} />
+                                </motion.div>
+                            );
+                        })}
+                    </motion.div>
+
+                    {/* Quick Stats */}
+                    <motion.div
+                        className="mt-16 rounded-3xl bg-gradient-to-br from-primary/5 via-white to-emerald-500/5 p-8 ring-1 ring-primary/10 md:p-10"
+                        variants={scaleUpVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.3 }}
+                    >
+                        <div className="grid gap-6 md:grid-cols-3 md:gap-8 text-center">
+                            <motion.div
+                                className="relative"
+                                whileHover={{ scale: 1.05 }}
+                            >
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="h-20 w-20 rounded-full bg-primary/10 blur-2xl" />
+                                </div>
+                                <p className="relative text-4xl font-bold text-primary md:text-5xl">95%+</p>
+                                <p className="relative mt-2 text-sm font-medium text-gray-600">Kebun Aktif Terbantu</p>
+                            </motion.div>
+                            <motion.div
+                                className="relative"
+                                whileHover={{ scale: 1.05 }}
+                            >
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="h-20 w-20 rounded-full bg-cyan-500/10 blur-2xl" />
+                                </div>
+                                <p className="relative text-4xl font-bold text-cyan-600 md:text-5xl">-30%</p>
+                                <p className="relative mt-2 text-sm font-medium text-gray-600">Konsumsi Air Lebih Efisien</p>
+                            </motion.div>
+                            <motion.div
+                                className="relative"
+                                whileHover={{ scale: 1.05 }}
+                            >
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="h-20 w-20 rounded-full bg-emerald-500/10 blur-2xl" />
+                                </div>
+                                <p className="relative text-4xl font-bold text-emerald-600 md:text-5xl">3 Area</p>
+                                <p className="relative mt-2 text-sm font-medium text-gray-600">Balkon, Rooftop, Komunal</p>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Timeline Section */}
+            <section className="relative py-16 md:py-24 overflow-hidden">
+                {/* Background decoration */}
+                <div className="absolute inset-0">
+                    <div className="absolute left-1/2 top-0 h-full w-px bg-gradient-to-b from-transparent via-primary/20 to-transparent" />
+                </div>
+
+                <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+                    {/* Section Header */}
+                    <motion.div
+                        className="mx-auto max-w-3xl text-center mb-12 md:mb-16"
+                        variants={fadeUpVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.5 }}
+                    >
+                        <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
+                            <ArrowRight className="h-4 w-4" />
+                            Roadmap
+                        </div>
+                        <h2 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
+                            Perjalanan{' '}
+                            <span className="bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent">
+                                Kami
+                            </span>
+                        </h2>
+                        <p className="mt-4 text-base text-gray-600 md:text-lg">
+                            Dari ide awal hingga versi beta, Hamasense dikembangkan melalui proses riset dan validasi.
+                        </p>
+                    </motion.div>
+
+                    {/* Timeline Cards */}
+                    <div className="relative">
+                        {/* Timeline Line */}
+                        <motion.div
+                            className="absolute left-4 top-0 h-full w-0.5 bg-gradient-to-b from-primary via-emerald-500 to-gray-200 md:left-1/2 md:-translate-x-px origin-top"
+                            initial={{ scaleY: 0 }}
+                            whileInView={{ scaleY: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1.5, ease: 'easeOut' }}
+                        />
+
+                        <motion.div
+                            className="space-y-8 md:space-y-12"
+                            variants={timelineVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.1 }}
+                        >
+                            {milestones.map((milestone, index) => {
+                                const Icon = milestone.icon;
+                                const isCompleted = milestone.status === 'completed';
+                                const isCurrent = milestone.status === 'current';
+
+                                return (
+                                    <motion.div
+                                        key={index}
+                                        className={`relative flex flex-col gap-4 pl-12 md:flex-row md:pl-0 ${index % 2 === 0
+                                            ? 'md:pr-[calc(50%+2rem)]'
+                                            : 'md:pl-[calc(50%+2rem)]'
+                                            }`}
+                                        variants={timelineItemVariants}
+                                    >
+                                        {/* Timeline Node */}
+                                        <motion.div
+                                            className={`absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full ring-4 ring-white md:left-1/2 md:-translate-x-1/2 ${isCompleted
+                                                ? 'bg-gradient-to-br from-primary to-emerald-500 text-white'
+                                                : isCurrent
+                                                    ? 'bg-white ring-primary/30'
+                                                    : 'bg-gray-100'
+                                                }`}
+                                            whileHover={{ scale: 1.2 }}
+                                            animate={isCurrent ? { scale: [1, 1.1, 1] } : {}}
+                                            transition={isCurrent ? { duration: 2, repeat: Infinity } : {}}
+                                        >
+                                            {isCompleted ? (
+                                                <CheckCircle2 className="h-4 w-4" />
+                                            ) : isCurrent ? (
+                                                <span className="h-3 w-3 rounded-full bg-primary" />
+                                            ) : (
+                                                <span className="h-2 w-2 rounded-full bg-gray-300" />
+                                            )}
+                                        </motion.div>
+
+                                        {/* Card */}
+                                        <motion.div
+                                            className={`group relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm ring-1 transition-all duration-300 hover:shadow-lg md:p-6 ${isCompleted ? 'ring-primary/20' : isCurrent ? 'ring-primary/40 shadow-lg shadow-primary/10' : 'ring-gray-100'
+                                                }`}
+                                            whileHover={{ y: -5, scale: 1.02 }}
+                                        >
+                                            {/* Status Badge */}
+                                            <div className={`absolute right-4 top-4 rounded-full px-2.5 py-0.5 text-xs font-medium ${isCompleted
+                                                ? 'bg-primary/10 text-primary'
+                                                : isCurrent
+                                                    ? 'bg-amber-500/10 text-amber-600'
+                                                    : 'bg-gray-100 text-gray-500'
+                                                }`}>
+                                                {isCompleted ? 'Selesai' : isCurrent ? 'Berjalan' : 'Mendatang'}
+                                            </div>
+
+                                            <div className={`mb-3 inline-flex rounded-xl p-2.5 ${isCompleted ? 'bg-primary/10' : isCurrent ? 'bg-amber-500/10' : 'bg-gray-100'
+                                                }`}>
+                                                <Icon className={`h-5 w-5 ${isCompleted ? 'text-primary' : isCurrent ? 'text-amber-600' : 'text-gray-400'
+                                                    }`} />
+                                            </div>
+
+                                            <p className={`text-xs font-bold uppercase tracking-widest ${isCompleted ? 'text-primary' : isCurrent ? 'text-amber-600' : 'text-gray-400'
+                                                }`}>
+                                                {milestone.year}
+                                            </p>
+                                            <p className="mt-2 text-base font-medium text-gray-900 md:text-lg pr-16">
+                                                {milestone.event}
+                                            </p>
+                                        </motion.div>
+                                    </motion.div>
+                                );
+                            })}
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Team Section */}
+            <section className="relative bg-gradient-to-b from-gray-50 to-white py-16 md:py-24 overflow-hidden">
+                {/* Background decoration */}
+                <div className="absolute inset-0">
+                    <div className="absolute -left-48 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl" />
+                    <div className="absolute -right-48 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-emerald-500/5 blur-3xl" />
+                </div>
+
+                <div className="relative mx-auto max-w-7xl px-4 md:px-6">
+                    {/* Section Header */}
+                    <motion.div
+                        className="mx-auto max-w-3xl text-center mb-12 md:mb-16"
+                        variants={fadeUpVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.5 }}
+                    >
+                        <div className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-4 py-1.5 text-sm font-medium text-violet-600 mb-4">
+                            <Users className="h-4 w-4" />
+                            Tim Kami
+                        </div>
+                        <h2 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
+                            Tim Di Balik{' '}
+                            <span className="font-logo bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent">
+                                HAMASENSE
+                            </span>
+                        </h2>
+                        <p className="mt-4 text-base text-gray-600 md:text-lg max-w-2xl mx-auto">
+                            Tim multidisiplin yang menyeimbangkan teknologi AI dengan praktik
+                            urban farming untuk masyarakat kota.
+                        </p>
+                    </motion.div>
+
+                    {/* Mobile: Stack cards */}
+                    <motion.div
+                        className="flex flex-col gap-4 lg:hidden"
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.1 }}
+                    >
+                        {teamMembers.map((member, index) => (
+                            <motion.div key={member.nim || index} variants={cardVariants}>
+                                <TeamCard member={member} highlight={index === 0} />
+                            </motion.div>
+                        ))}
+                    </motion.div>
+
+                    {/* Desktop: Lead centered + grid */}
+                    <div className="hidden lg:block">
+                        {/* Project Lead - centered and featured */}
+                        <motion.div
+                            className="mb-10 flex justify-center"
+                            variants={scaleUpVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.3 }}
+                        >
+                            <div className="w-full max-w-md">
+                                <TeamCard member={lead} highlight />
+                            </div>
+                        </motion.div>
+
+                        {/* Other team members - 4 columns */}
+                        <motion.div
+                            className="grid grid-cols-4 gap-5"
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.2 }}
+                        >
+                            {others.map((member, index) => (
+                                <motion.div key={member.nim || index} variants={cardVariants}>
+                                    <TeamCard member={member} />
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+        </HomeLayout>
+    );
+}
+
+type TeamCardProps = {
+    member: TeamMember;
+    highlight?: boolean;
+};
+
+function TeamCard({ member, highlight }: TeamCardProps) {
+    return (
+        <motion.article
+            className={`group relative overflow-hidden rounded-3xl bg-gray-900 text-white shadow-lg transition-all duration-500 ease-out focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-white ${highlight ? 'h-[26rem]' : 'h-72'
+                }`}
+            whileHover={{ y: -8, scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+        >
+            {/* Background image */}
+            <motion.img
+                src={member.image}
+                alt={member.name}
+                className="absolute inset-0 h-full w-full object-cover"
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.7 }}
+            />
+
+            {/* Overlay with gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-90" />
+
+            {/* Decorative accent */}
+            <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-primary via-emerald-500 to-cyan-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+            {/* Content */}
+            <div className="relative flex h-full flex-col justify-between p-5 sm:p-6">
+                {/* Badge untuk project lead */}
+                {highlight && (
+                    <motion.div
+                        className="self-start"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary/90 to-emerald-500/90 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/70 shadow-lg backdrop-blur">
+                            <Sparkles className="h-3.5 w-3.5" />
+                            Project Lead
+                        </div>
+                    </motion.div>
+                )}
+
+                <div className="mt-auto">
+                    <p className="text-xs font-medium text-white/60 tracking-wider">
+                        {member.nim}
+                    </p>
+                    <h3 className="mt-2 text-lg font-bold text-white leading-tight group-hover:text-white transition-colors duration-300">
+                        {member.name}
+                    </h3>
+                    <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm text-white/90 backdrop-blur-sm">
+                        {member.role}
+                    </div>
+                </div>
+            </div>
+        </motion.article>
+    );
+}

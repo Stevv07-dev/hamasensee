@@ -1,0 +1,415 @@
+import React, { useState } from 'react';
+import { useForm } from '@inertiajs/react';
+import { Upload, Paperclip, Plus, Trash2 } from 'lucide-react';
+import AdminLayout from '@/components/admin/layout';
+import { type BreadcrumbItem } from '@/types';
+import { Category } from '@/types/admin';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Admin', href: '/admin' },
+    { title: 'Kelola Hama', href: '/admin/pest' },
+    { title: 'Tambah Hama', href: '#' },
+];
+
+const RISK_LEVELS = [
+    { value: 'rendah', label: 'Rendah' },
+    { value: 'sedang', label: 'Sedang' },
+    { value: 'tinggi', label: 'Tinggi' },
+];
+
+export default function TambahHama({ categories }: { categories: Category[] }) {
+
+    const { data, setData, post, processing } = useForm<{
+        name: string;
+        slug: string;
+        scientific_name: string;
+        description: string;
+        category: string;
+        risk_level: 'rendah' | 'sedang' | 'tinggi' | '';
+        plant: string[];
+        pencegahan: string[];
+        penanganan: string[];
+        img_path: File | null;
+    }>({
+        name: '',
+        slug: '',
+        scientific_name: '',
+        description: '',
+        category: '',
+        risk_level: 'sedang',
+        plant: [],
+        pencegahan: [],
+        penanganan: [],
+        img_path: null
+    });
+
+
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setData('img_path', file);
+            setUploadedImage(URL.createObjectURL(file));
+        }
+    };
+
+    const handleCancel = () => {
+        window.history.back();
+    };
+
+    const validate = () => {
+        const newErrors: Record<string, string> = {};
+
+        if (!data.name.trim()) {
+            newErrors.name = 'Nama hama wajib diisi';
+        }
+
+        if (!data.scientific_name.trim()) {
+            newErrors.scientific_name = 'Nama latin wajib diisi';
+        }
+
+        if (!data.description.trim()) {
+            newErrors.description = 'Deskripsi hama wajib diisi';
+        }
+
+        if (!data.category.trim()) {
+            newErrors.category = 'Wajib memilih kategori hama';
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+    };
+
+
+    const create = async () => {
+        if (!validate()) return;
+
+        post('/admin/pest/', {
+            forceFormData: true,
+        });
+    };
+
+    // Dynamic list handlers - Tanaman
+    const addPlant = () => {
+        setData('plant', [...data.plant, '']);
+    };
+
+    const updatePlant = (index: number, value: string) => {
+        const newList = [...data.plant];
+        newList[index] = value;
+        setData('plant', newList);
+    };
+
+    const removePlant = (index: number) => {
+        setData('plant', data.plant.filter((_, i) => i !== index));
+    };
+
+    // Dynamic list handlers - Pencegahan
+    const addPencegahan = () => {
+        setData('pencegahan', [...data.pencegahan, '']);
+    };
+
+    const updatePencegahan = (index: number, value: string) => {
+        const newList = [...data.pencegahan];
+        newList[index] = value;
+        setData('pencegahan', newList);
+    };
+
+    const removePencegahan = (index: number) => {
+        setData('pencegahan', data.pencegahan.filter((_, i) => i !== index));
+    };
+
+    const addPenanganan = () => {
+        setData('penanganan', [...data.penanganan, '']);
+    };
+
+    const updatePenanganan = (index: number, value: string) => {
+        const newList = [...data.penanganan];
+        newList[index] = value;
+        setData('penanganan', newList);
+    };
+
+    const removePenanganan = (index: number) => {
+        setData('penanganan', data.penanganan.filter((_, i) => i !== index));
+    };
+
+    return (
+        <AdminLayout breadcrumbs={breadcrumbs}>
+            <div className="flex-1 overflow-auto text-gray-900">
+                <div className="p-8">
+                    <div className="bg-white rounded-lg shadow-sm p-8 max-w-7xl">
+                        <h1 className="text-2xl font-bold mb-8 text-gray-900">Tambahkan Hama</h1>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            {/* Left Column - Upload */}
+                            <div>
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center h-full flex flex-col justify-center">
+                                    <h3 className="text-lg font-semibold mb-6">Upload Foto</h3>
+
+                                    {uploadedImage ? (
+                                        <div className="mb-4">
+                                            <img src={uploadedImage} alt="Preview"
+                                                className="w-full h-80 object-cover rounded-lg mb-4" />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setData('img_path', null);
+                                                    setUploadedImage(null);
+                                                }}
+                                                className="text-sm text-red-500 hover:text-red-700"
+                                            >
+                                                Hapus gambar
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="mb-6">
+                                            <div className="flex justify-center mb-6">
+                                                <Upload className="w-16 h-16 text-gray-400" />
+                                            </div>
+                                            <p className="text-gray-700 font-medium mb-2">Seret atau unggah gambar</p>
+                                            <p className="text-sm text-gray-400 mb-6">
+                                                atau klik tombol dibawah ini untuk memilih file
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    <label className="inline-flex items-center gap-2 px-6 py-2.5 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors mx-auto">
+                                        <Paperclip className="w-5 h-5" />
+                                        <span className="font-medium">Pilih File</span>
+                                        <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                                    </label>
+                                    {/* {errors.img_path && <div className="text-red-500 text-sm mt-2">{errors.img_path}</div>} */}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Column - Form */}
+                        <div>
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                    {/* Nama Hama */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Nama Hama
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={data.name}
+                                            onChange={(e) => setData('name', e.target.value)}
+                                            placeholder="Ulat Grayak"
+                                            className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-teal-500'}`}
+                                        />
+                                        {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
+                                    </div>
+                                    {/* Nama Latin */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Nama Latin
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={data.scientific_name}
+                                            onChange={(e) => setData('scientific_name', e.target.value)}
+                                            placeholder="Spodoptera litura"
+                                            className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 italic ${errors.scientific_name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-teal-500'}`}
+                                        />
+                                        {errors.scientific_name && <div className="text-red-500 text-sm mt-1">{errors.scientific_name}</div>}
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    {/* Kategori */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Kategori
+                                        </label>
+                                        <select
+                                            value={data.category}
+                                            onChange={(e) => setData('category', e.target.value)}
+                                            className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white ${errors.category ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-teal-500'}`}
+                                        >
+                                            <option value="" disabled>Pilih Kategori</option>
+                                            {categories.map((cat) => (
+                                                <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                            ))}
+                                        </select>
+                                        {errors.category && <div className="text-red-500 text-sm mt-1">{errors.category}</div>}
+                                    </div>
+                                    {/* Tingkat Risiko */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Tingkat Risiko
+                                        </label>
+                                        <select
+                                            value={data.risk_level}
+                                            onChange={(e) => setData('risk_level', e.target.value as 'rendah' | 'sedang' | 'tinggi')}
+                                            className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white`}
+                                        >
+                                            {RISK_LEVELS.map((level) => (
+                                                <option key={level.value} value={level.value}>{level.label}</option>
+                                            ))}
+                                        </select>
+                                        {errors.risk_level && <div className="text-red-500 text-sm mt-1">{errors.risk_level}</div>}
+                                    </div>
+                                </div>
+
+                                {/* Description */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Deskripsi
+                                    </label>
+                                    <textarea
+                                        value={data.description}
+                                        onChange={(e) => setData('description', e.target.value)}
+                                        placeholder="Deskripsi tentang hama ini..."
+                                        rows={4}
+                                        className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none ${errors.description ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-teal-500'}`}
+                                    ></textarea>
+                                    {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
+                                </div>
+
+                                {/* Tanaman Inang */}
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Tanaman Inang
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={addPlant}
+                                            className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors"
+                                        >
+                                            <Plus className="w-4 h-4" /> Tambah
+                                        </button>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {data.plant.map((item, index) => (
+                                            <div key={index} className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={item}
+                                                    onChange={(e) => updatePlant(index, e.target.value)}
+                                                    placeholder={`Nama tanaman ${index + 1}`}
+                                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removePlant(index)}
+                                                    className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                        {data.plant.length === 0 && (
+                                            <p className="text-sm text-gray-400 italic">Belum ada tanaman inang</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Pencegahan */}
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Langkah Pencegahan
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={addPencegahan}
+                                            className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors"
+                                        >
+                                            <Plus className="w-4 h-4" /> Tambah
+                                        </button>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {data.pencegahan.map((item, index) => (
+                                            <div key={index} className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={item}
+                                                    onChange={(e) => updatePencegahan(index, e.target.value)}
+                                                    placeholder={`Langkah pencegahan ${index + 1}`}
+                                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removePencegahan(index)}
+                                                    className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                        {data.pencegahan.length === 0 && (
+                                            <p className="text-sm text-gray-400 italic">Belum ada langkah pencegahan</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Penanganan */}
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Langkah Penanganan
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={addPenanganan}
+                                            className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 transition-colors"
+                                        >
+                                            <Plus className="w-4 h-4" /> Tambah
+                                        </button>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {data.penanganan.map((item, index) => (
+                                            <div key={index} className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={item}
+                                                    onChange={(e) => updatePenanganan(index, e.target.value)}
+                                                    placeholder={`Langkah penanganan ${index + 1}`}
+                                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removePenanganan(index)}
+                                                    className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                        {data.penanganan.length === 0 && (
+                                            <p className="text-sm text-gray-400 italic">Belum ada langkah penanganan</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-4 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={handleCancel}
+                                        className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                                    >
+                                        Batal
+                                    </button>
+                                    <button
+                                        onClick={create}
+                                        type='button'
+                                        disabled={processing}
+                                        className={`px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors ${processing ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    >
+                                        {processing ? 'Menyimpan...' : 'Tambahkan'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </AdminLayout>
+    );
+};
